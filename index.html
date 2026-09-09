@@ -8,105 +8,152 @@
 <title>KABU Quick Lot</title>
 <style>
 *{box-sizing:border-box}
-:root{--bg:#f4f6f9;--card:#fff;--field:#f7f8fa;--line:#dfe3e9;--text:#171b24;--muted:#687386;--accent:#4f62e8}
+:root{--bg:#f4f6f9;--card:#fff;--field:#f7f8fa;--line:#dfe3e9;--text:#171b24;--muted:#687386;--accent:#4f62e8;--success:#16834b;--danger:#d9364f}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;padding:16px}
 .app{width:min(430px,100%);margin:auto}
 header{display:flex;align-items:center;gap:10px;margin:5px 0 16px}
 .logo{width:34px;height:34px;border-radius:9px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:900}
-h1{font-size:16px;margin:0}header span{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+h1{font-size:16px;margin:0} header span{display:block;color:var(--muted);font-size:10px;margin-top:2px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 5px 20px #1b263b0a}
-label{display:block;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
 .field{margin-bottom:13px}
+label{display:block;color:var(--muted);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px}
+.help{color:var(--muted);font-size:9px;line-height:1.4;margin:-3px 0 7px}
 input{width:100%;height:49px;background:var(--field);border:1px solid var(--line);border-radius:11px;color:var(--text);padding:0 13px;font-size:18px;outline:0}
 input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px #4f62e812}
 .riskrow{display:grid;grid-template-columns:1fr 58px;gap:7px}
-.currency{border:1px solid var(--line);background:var(--field);color:var(--text);border-radius:11px;font-size:18px;font-weight:800}
+.currency{border:1px solid var(--line);background:var(--field);color:var(--text);border-radius:11px;font-size:18px;font-weight:800;cursor:pointer}
 .result{margin-top:5px;background:#f8f9fc;border:1px solid #d9deea;border-radius:14px;padding:19px;text-align:center}
 .result label{margin:0;color:var(--muted)}
 .lot{font-size:54px;line-height:1.02;font-weight:950;letter-spacing:-2px;margin:5px 0}
 .lots{font-size:11px;color:var(--muted);font-weight:800}
 .meta{display:flex;justify-content:center;gap:22px;border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
 .meta span{display:block;color:var(--muted);font-size:10px}.meta b{font-size:13px}
-.copy{width:100%;height:43px;margin-top:14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:900}
-.formula{text-align:center;color:var(--muted);font-size:10px;margin-top:10px;line-height:1.4}
-.error{text-align:center;color:#d9364f;font-size:11px;min-height:15px;margin-top:7px}
+.copy{width:100%;height:43px;margin-top:14px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-weight:900;cursor:pointer}
+.formula{text-align:center;color:var(--muted);font-size:10px;margin-top:10px;line-height:1.5}
+.error{text-align:center;color:var(--danger);font-size:11px;min-height:15px;margin-top:7px}
+.success{color:var(--success)}
 details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
 summary{color:var(--muted);font-size:10px;font-weight:800;cursor:pointer}
-.advanced{padding-top:11px}.advanced .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.advanced label{font-size:9px;margin-bottom:4px}.advanced input{height:37px;font-size:13px}
-.note{text-align:center;color:#7a8494;font-size:9px;line-height:1.4;margin:12px 2px 0}
+.advanced{padding-top:11px}.advanced .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.advanced label{font-size:9px;margin-bottom:4px}.advanced input{height:37px;font-size:13px}
+.broker-set{width:100%;height:38px;margin-top:10px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:10px;font-weight:900;cursor:pointer}
+.broker-set:active{transform:translateY(1px)}
+.note{text-align:center;color:#7a8494;font-size:9px;line-height:1.5;margin:12px 2px 0}
+.example{margin-top:13px;background:#f7f8fc;border:1px solid var(--line);border-radius:11px;padding:11px;font-size:10px;line-height:1.5;color:var(--muted)}
+.example strong{color:var(--text)}
+.divider{height:1px;background:var(--line);margin:14px 0}
 </style>
 </head>
 <body>
 <div class="app">
 <header><div class="logo">K</div><div><h1>KABU Quick Lot</h1><span>Risk → Lot Size</span></div></header>
-
 <div class="card">
   <div class="field">
-    <label>Loss at 0.01 lot</label>
-    <input id="sampleRisk" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 0.80">
+    <label>MT5 Sample Lot Size</label>
+    <div class="help">Enter any valid lot size you used in MT5 — not necessarily 0.01.</div>
+    <input id="sampleLot" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 0.10">
   </div>
-
   <div class="field">
-    <label>Risk amount</label>
-    <div class="riskrow"><input id="risk" type="number" inputmode="decimal" step="0.01" value="20"><button class="currency" id="currency">$</button></div>
+    <label>Loss at Sample Lot</label>
+    <div class="help">Enter the loss MT5 shows if the stop loss is hit.</div>
+    <div class="riskrow"><input id="sampleLoss" type="number" inputmode="decimal" step="0.01" placeholder="e.g. 8.50"><button class="currency" id="currency">$</button></div>
   </div>
-
+  <div class="divider"></div>
+  <div class="field">
+    <label>Desired Risk</label>
+    <div class="help">How much money are you willing to lose if the stop loss is hit?</div>
+    <div class="riskrow"><input id="risk" type="number" inputmode="decimal" step="0.01" value="20"><button class="currency" id="currency2">$</button></div>
+  </div>
   <div class="result">
-    <label>Buy / Sell this size</label>
-    <div class="lot" id="lot">—</div>
-    <div class="lots">LOTS</div>
+    <label>Use This Lot Size</label>
+    <div class="lot" id="lot">—</div><div class="lots">LOTS</div>
     <div class="meta">
-      <div><span>Your risk</span><b id="riskOut">$20.00</b></div>
-      <div><span>At 0.01 lot</span><b id="sampleOut">—</b></div>
+      <div><span>Desired risk</span><b id="riskOut">$20.00</b></div>
+      <div><span>Sample risk</span><b id="sampleOut">—</b></div>
     </div>
     <button class="copy" id="copy">COPY LOT SIZE</button>
-    <div class="formula" id="formula">Enter the loss at 0.01 lot.</div>
+    <div class="formula" id="formula">Enter your MT5 sample lot and the loss shown at that stop.</div>
     <div class="error" id="error"></div>
   </div>
-
-  <details>
-    <summary>⚙ Broker lot step</summary>
-    <div class="advanced">
-      <div class="grid">
-        <div><label>Lot step</label><input id="step" type="number" step="0.01" value="0.01"></div>
-        <div><label>Minimum lot</label><input id="min" type="number" step="0.01" value="0.01"></div>
-      </div>
-    </div>
-  </details>
-
-  <div class="note">Set your stop in MT5, check what 0.01 lot would lose at that stop, then enter that loss above.</div>
+  <div class="example"><strong>Example</strong><br>MT5 sample lot: <strong>0.10</strong><br>MT5 loss at SL: <strong>$8.50</strong><br>Your desired risk: <strong>$20</strong><br><br>KABU calculates:<br><strong>$20 ÷ $8.50 × 0.10 = 0.235 lots</strong></div>
+  <details><summary>⚙ Broker lot settings</summary><div class="advanced"><div class="grid">
+    <div><label>Lot step</label><input id="step" type="number" step="0.01" value="0.01"></div>
+    <div><label>Minimum lot</label><input id="min" type="number" step="0.01" value="0.01"></div>
+  </div>
+  <button class="broker-set" id="brokerSet" type="button">SET BROKER SETTINGS</button></div></details>
+  <div class="note">Set your entry and stop loss in MT5. Enter any valid sample lot size and the loss MT5 shows at that stop. KABU converts it into the lot size that matches your desired risk.</div>
 </div>
 </div>
-
 <script>
 const $=id=>document.getElementById(id);
 let currency=localStorage.kabuCurrency||'$';
-
 function fmt(n){return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}
-function decimals(n){return String(n).includes('.')?String(n).split('.')[1].length:2}
+function decimals(n){const s=String(n);return s.includes('.')?s.split('.')[1].length:2}
+function save(){localStorage.kabuQuick=JSON.stringify({risk:$('risk').value,sampleLot:$('sampleLot').value,sampleLoss:$('sampleLoss').value,step:$('step').value,min:$('min').value})}
 function calc(){
- const risk=parseFloat($('risk').value), sample=parseFloat($('sampleRisk').value), step=parseFloat($('step').value)||.01, min=parseFloat($('min').value)||.01;
+ const sampleLot=parseFloat($('sampleLot').value),sampleLoss=parseFloat($('sampleLoss').value),risk=parseFloat($('risk').value);
+ const step=parseFloat($('step').value)||0.01,min=parseFloat($('min').value)||0.01;
  $('riskOut').textContent=currency+fmt(risk||0);
- $('sampleOut').textContent=Number.isFinite(sample)?currency+fmt(sample):'—';
- $('error').textContent='';
- if(!Number.isFinite(risk)||!Number.isFinite(sample)||risk<=0||sample<=0){$('lot').textContent='—';$('formula').textContent='Enter the loss at 0.01 lot.';return}
- let raw=risk/sample*.01;
- let lot=Math.floor((raw+1e-12)/step)*step;
- if(lot<min){lot=min;$('error').textContent=`Minimum ${min.toFixed(decimals(step))} lot • risk would be ${currency}${fmt(sample*(lot/.01))}`}
+ $('sampleOut').textContent=Number.isFinite(sampleLoss)?currency+fmt(sampleLoss):'—';
+ $('error').textContent='';$('error').className='error';
+ if(!Number.isFinite(sampleLot)||!Number.isFinite(sampleLoss)||!Number.isFinite(risk)||sampleLot<=0||sampleLoss<=0||risk<=0){
+   $('lot').textContent='—';$('copy').textContent='COPY LOT SIZE';
+   $('formula').textContent='Enter your MT5 sample lot and the loss shown at that stop.';
+   window.lot=null;save();return;
+ }
+ if(step<=0){$('lot').textContent='—';$('error').textContent='Lot step must be greater than 0.';window.lot=null;return}
+ const rawLot=(risk/sampleLoss)*sampleLot;
+ const rounded=Math.floor((rawLot+1e-12)/step)*step;
  const d=Math.max(2,decimals(step));
- $('lot').textContent=lot.toFixed(d);
- $('copy').textContent='COPY '+lot.toFixed(d);
- $('formula').textContent=`${currency}${fmt(risk)} ÷ ${currency}${fmt(sample)} × 0.01 = ${lot.toFixed(d)} lot`;
- window.lot=lot;
- localStorage.kabuQuick=JSON.stringify({risk:$('risk').value,sample:$('sampleRisk').value,step:$('step').value,min:$('min').value});
+ let finalLot=rounded;
+ if(finalLot<min){
+   finalLot=min;
+   const minimumRisk=sampleLoss*(finalLot/sampleLot);
+   $('error').textContent=`Minimum ${min.toFixed(d)} lot • risk would be ${currency}${fmt(minimumRisk)}`;
+ }
+ $('lot').textContent=finalLot.toFixed(d);
+ $('copy').textContent='COPY '+finalLot.toFixed(d);
+ $('formula').textContent=`${currency}${fmt(risk)} ÷ ${currency}${fmt(sampleLoss)} × ${sampleLot} = ${finalLot.toFixed(d)} lot`;
+ window.lot=finalLot;save();
 }
 function load(){
- try{let d=JSON.parse(localStorage.kabuQuick||'{}');['risk','sampleRisk','step','min'].forEach(k=>{if(d[k]!=null)$(k).value=d[k]})}catch(e){}
- $('currency').textContent=currency;calc();
+ try{
+  const d=JSON.parse(localStorage.kabuQuick||'{}');
+  ['risk','sampleLot','sampleLoss','step','min'].forEach(k=>{if(d[k]!=null)$(k).value=d[k]});
+ }catch(e){}
+ $('currency').textContent=currency;$('currency2').textContent=currency;calc();
 }
-['risk','sampleRisk','step','min'].forEach(id=>$(id).addEventListener('input',calc));
-$('copy').onclick=()=>{if(window.lot!=null){navigator.clipboard?.writeText(String(window.lot));$('copy').textContent='COPIED ✓';setTimeout(calc,900)}};
-$('currency').onclick=()=>{currency=currency==='$'?'€':currency==='€'?'£':'$';localStorage.kabuCurrency=currency;$('currency').textContent=currency;calc()};
+['risk','sampleLot','sampleLoss','step','min'].forEach(id=>$(id).addEventListener('input',calc));
+$('copy').onclick=async()=>{
+ if(window.lot==null)return;
+ try{
+  await navigator.clipboard.writeText(String(window.lot));
+  $('copy').textContent='COPIED ✓';$('error').textContent='Lot size copied to clipboard.';$('error').className='error success';
+  setTimeout(calc,900);
+ }catch(e){$('error').textContent='Could not copy automatically.'}
+};
+function changeCurrency(){
+ currency=currency==='$'?'€':currency==='€'?'£':'$';
+ localStorage.kabuCurrency=currency;$('currency').textContent=currency;$('currency2').textContent=currency;calc();
+}
+$('currency').onclick=changeCurrency;
+$('currency2').onclick=changeCurrency;
+
+$('brokerSet').onclick=()=>{
+  $('step').value='0.01';
+  $('min').value='0.01';
+
+  localStorage.kabuBrokerSettings =
+    JSON.stringify({step:'0.01',min:'0.01'});
+
+  calc();
+
+  $('brokerSet').textContent='SET ✓';
+  setTimeout(()=>{
+    $('brokerSet').textContent='SET BROKER SETTINGS';
+  },900);
+};
+
 load();
 </script>
 </body>
